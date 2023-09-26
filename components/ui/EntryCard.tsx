@@ -20,6 +20,18 @@ export const EntryCard: FC<Props> = ({ entry }) => {
         endDragging();
     }
 
+    const getTimeAgo = (): string => {
+        let diff = Math.ceil((Date.now() - entry.createdAt) / 1000 / 60); // in minutes
+        if ( diff < 60 ) { return `${diff} min ago` }
+        diff = Math.round(diff / 60); // in hours
+        if ( diff < 24 ) { return `${diff} h ago` }
+        diff = Math.round(diff / 24); // in days
+        if ( diff === 1 ) { return `${diff} day ago` }
+        else if ( diff < 15 ) { return `${diff} days ago` }
+        const date = new Date(entry.createdAt);
+        return date.toDateString().substring(date.toDateString().indexOf(' ') + 1);
+    }
+
     return (
         <Card
             sx={{ marginBottom: 1 }}
@@ -33,7 +45,7 @@ export const EntryCard: FC<Props> = ({ entry }) => {
                 </CardContent>
 
                 <CardActions sx={{ display: 'flex', justifyContent: 'end', paddingRight: 2}}>
-                    <Typography variant='body2'>Hace 30 min.</Typography>
+                    <Typography variant='body2'>{ getTimeAgo() }</Typography>
                 </CardActions>
             </CardActionArea>
         </Card>
