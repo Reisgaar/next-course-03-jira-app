@@ -5,7 +5,8 @@ type EntriesActionType =
     | { type: 'Entry - Add-Entry', payload: Entry }
     | { type: 'Entry - Update-Entry', payload: Entry }
     | { type: 'Entry - Refresh-Data', payload: Entry[] }
-
+    | { type: 'Entry - Delete-Entry', payload: Entry }
+    
 // Recibe un estado y produce un nuevo estado
 // No es bueno que llame logs
 // Debe resolver todo sin salir de la función
@@ -33,6 +34,11 @@ export const entriesReducer = ( state: EntriesState, action: EntriesActionType )
             return {
                 ...state,
                 entries: [...action.payload]
+            }
+        case 'Entry - Delete-Entry':
+            return {
+                ...state,
+                entries: state.entries.filter( entry => entry._id !== action.payload._id )
             }
         default:
             return state;

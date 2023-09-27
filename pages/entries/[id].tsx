@@ -7,6 +7,7 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { Entry, EntryStatus } from '@/interfaces';
 import { dbEntries } from '@/database';
 import { EntriesContext } from '@/context/entries';
+import { dateFunctions } from '@/utils';
 
 const validStatus: EntryStatus[] = ['pending', 'in-progress', 'finished'];
 
@@ -16,7 +17,7 @@ interface Props {
 
 export const EntryPage: FC<Props> = ({ entry }) => {
 
-    const { updateEntry } = useContext(EntriesContext);
+    const { updateEntry, deleteEntry } = useContext(EntriesContext);
 
     const [inputValue, setInputValue] = useState(entry.description);
     const [status, setStatus] = useState<EntryStatus>(entry.status);
@@ -42,8 +43,8 @@ export const EntryPage: FC<Props> = ({ entry }) => {
         updateEntry(updatedEntry, true);
     }
 
-    const deleteEntry = () => {
-        
+    const callDeleteEntry = () => {
+        deleteEntry(entry);
     }
 
     return (
@@ -52,7 +53,7 @@ export const EntryPage: FC<Props> = ({ entry }) => {
                 <Grid container justifyContent='center' sx={{ marginTop: 2 }}>
                     <Grid item xs={12} sm={8} md={6}>
                         <Card>
-                            <CardHeader title={`Entrada: `} subheader={`Creado hace ${entry.createdAt} minutos`} />
+                            <CardHeader title={`Entrada: `} subheader={ dateFunctions.getFormatDistanceToNow(entry.createdAt) } />
                             <CardContent>
                                 <TextField
                                     sx={{ marginTop: 2, marginBottom: 1}}
@@ -106,7 +107,7 @@ export const EntryPage: FC<Props> = ({ entry }) => {
                         right: 30,
                         backgroundColor: 'error.dark'
                     }}
-                    onClick={ deleteEntry }
+                    onClick={ callDeleteEntry }
                 >
                     <DeleteOutlinedIcon />
                 </IconButton>
