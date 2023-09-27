@@ -28,14 +28,14 @@ const getEntries = async(res: NextApiResponse<Data>) => {
 }
 
 const postEntry = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
-
+    
     const { description = '' } = req.body;
-
+    
     const newEntry = new Entry({
         description,
         createdAt: Date.now(),
     });
-
+    
     try {
         await db.connect();
         await newEntry.save();
